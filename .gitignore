@@ -1,0 +1,6 @@
+.tfenv
+terraform.tfvars
+terraform.tfstate
+terraform.tfstate.backup
+files/
+.terraform*

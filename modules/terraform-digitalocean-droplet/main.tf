@@ -35,12 +35,14 @@ resource "digitalocean_droplet" "default" {
   ssh_keys = [digitalocean_ssh_key.ssh_keypair.fingerprint]
 }
 
-data "digitalocean_volume" "home" {
-  name   = var.volume_home_name
+data "digitalocean_volume" "default" {
+  count  = length(var.attach_volume_names)
+  name   = var.attach_volume_names[count.index]
   region = var.region
 }
 
-resource "digitalocean_volume_attachment" "foobar" {
+resource "digitalocean_volume_attachment" "default" {
+  count      = length(var.attach_volume_names)
   droplet_id = digitalocean_droplet.default.id
-  volume_id  = data.digitalocean_volume.home.id
+  volume_id  = data.digitalocean_volume.default[count.index].id
 }

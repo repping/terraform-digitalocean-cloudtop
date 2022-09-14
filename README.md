@@ -1,7 +1,6 @@
 # Cloudtop: Virtual desktop environment in DO
-Inspired by @robertdebock 's https://github.com/robertdebock/ansible-playbook-cloudtop
 
-1. Checkout the folder `support_code` to create pre-requirements for the Cloudtop deployment.
+Inspired by @robertdebock 's <https://github.com/robertdebock/ansible-playbook-cloudtop>
 
 ## Inside the box
 
@@ -10,14 +9,12 @@ Inspired by @robertdebock 's https://github.com/robertdebock/ansible-playbook-cl
 
 ## Roadmap
 
-- mount persistant /home volume
+- [ ] mount persistant /home volume
   - make user supplied
-  - AND/OR integrate in seperate tf root module "support-code"
-  - make it replace default home partition, see chapter home mount.
+  - [x] make it replace default home partition, see chapter home mount. --> replaced by just manually linking to a folder in the homedir.
 - [x] configure domain (Cloudflare) + hostname
-- [ ] merge modules: sshkey and volume into droplet
-  - [ ] optioneel maken + user supplied maken, zie TODO en var.sshkey in main.tf.
-- [ ] merge modules: project into root module
+- [x] MERGE modules: sshkey and volume into droplet. the modules are too tiny to be useful as a standalone module.
+  - [x] optioneel maken + user supplied maken, zie TODO en var.sshkey in main.tf.
 - automation:
   - packages
     - awscli
@@ -44,7 +41,19 @@ The user can supply their own ssh key by placing the files in `./files/<ssh_key_
 
 ## Home mount
 
-A seperate volume for the `/home` mount can be created with the code in `support_code`.
+The volume in Digital Ocean that will be used for the `home` mount has to be manually created first. This is because this mount will contain all our personal data and we want this data to persist recreation of the droplet. Sometimes you might not need the cloudtop for a longer period of time. This way you can keep the personal data without paying for the droplet in the mean time.
+
+![Money!](https://i.pinimg.com/originals/d3/19/2b/d3192ba96881787f4737180f4d1f37ce.png)
+
+To attach the volume to the droplet, simple declare `attach_volume_names` with a __list__ of volume names. The volume name was provided by the user when manually creating it in Digital Ocean.
+The modules DOES assume that the manually created disks recide in the same region as the droplet!
+Now that a persistant volume has been attached, it just needs to be partitioned and mounted.
+
+### Manual partitioning
+
+Note! In most cases partitioning should only be done once, the first time when no data has been written to the disk.
+Repeating this when the disk has allready been partitioned likely erases all data, unless you know what you are doing :)
+
 The partition and filesystem have to be manually created (for now):
 
 ```text
@@ -59,3 +68,21 @@ mount /dev/sda1 /home
 ```
 
 By default the DigitalOcean fedora image comes with a small /home partition. This will stay available and can be accessed again by unmounting the seperate home volume. (Unless this partition is deleted ofcourse!)
+
+### Manual mounting
+
+( From the Digital Ocean instructions: )
+
+```shell
+mkdir -p /mnt/<VOLUME_NAME>; \
+mount -o discard,defaults /dev/disk/by-id/scsi-0DO_Volume_<VOLUME_NAME> /mnt/<VOLUME_NAME>; \
+echo /dev/disk/by-id/scsi-0DO_Volume_<VOLUME_NAME> /mnt/<VOLUME_NAME> ext4 defaults,nofail,discard 0 0 | sudo tee -a /etc/fstab
+```
+
+### Personal touch
+
+I like to keep the volume mounted at `/mnt/cloudtop_persistent_volume` and create a link in my homefolder to the volume:
+
+```shell
+ln -s /mnt/cloudtop_persistent_volume/code /home/user/code
+```

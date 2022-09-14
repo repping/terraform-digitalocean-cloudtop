@@ -55,8 +55,8 @@ variable "region" {
     error_message = "Please set the ID for the DigitalOcean project to deploy the resources in. (var.project_id)"
   }
 }
-variable "volume_home_name" {
-  description = "Name of the digitalocean volume to attach as the volume where the /home folder will be mounted. This is to keep personal data when the droplet is destroyed to save cost."
-  type = string
-  default = ""
+variable "attach_volume_names" {
+  description = "IDs of the volumes that will be attached to the droplet."
+  type = list
+  default = []
 }

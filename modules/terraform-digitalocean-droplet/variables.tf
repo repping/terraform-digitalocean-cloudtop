@@ -10,7 +10,7 @@ variable "hostname" {
 variable "path" {
   type        = string
   description = "Path to where the SSH certificates ARE located or WILL BE located after the module generates them."
-  default     = "files/"
+  default     = "files"
 }
 variable "key_name" {
   type        = string

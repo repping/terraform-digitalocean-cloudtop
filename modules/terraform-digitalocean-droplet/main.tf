@@ -1,34 +1,32 @@
-# Generate RSA key of size 4096 bits
+# Generate RSA SSH key of size 4096 bits ONLY if it does not allready exist at the "var.path/var.keyname"
 resource "tls_private_key" "ssh_keypair" {
+  count     = fileexists("${path.module}/${var.path}/${var.key_name}") ? 0 : 1
   algorithm = "RSA"
   rsa_bits  = 4096
 }
 
-# Write the public certificate to file
 resource "local_file" "ssh_keypair" {
-  content  = tls_private_key.ssh_keypair.public_key_openssh
+  count    = fileexists("${path.module}/${var.path}/${var.key_name}") ? 0 : 1
+  content  = tls_private_key.ssh_keypair[0].public_key_openssh
   filename = "${var.path}/${var.key_name}.pub"
 }
 
-# Write the private certificate to file
 resource "local_sensitive_file" "ssh_keypair" {
-  content  = tls_private_key.ssh_keypair.private_key_openssh
+  count    = fileexists("${path.module}/${var.path}/${var.key_name}") ? 0 : 1
+  content  = tls_private_key.ssh_keypair[0].private_key_openssh
   filename = "${var.path}/${var.key_name}"
 }
 
-# Upload the public ssh key for the droplet
 resource "digitalocean_ssh_key" "ssh_keypair" {
   name       = var.key_name
-  public_key = tls_private_key.ssh_keypair.public_key_openssh
+  public_key = tls_private_key.ssh_keypair[0].public_key_openssh
 }
 
-# Assign the droplet resource to the project
 resource "digitalocean_project_resources" "default" {
   project   = var.project_id
   resources = digitalocean_droplet.default.*.urn
 }
 
-# Create the droplet
 resource "digitalocean_droplet" "default" {
   image    = var.droplet_image
   name     = var.hostname

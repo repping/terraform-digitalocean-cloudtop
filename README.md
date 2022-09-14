@@ -16,6 +16,7 @@ Inspired by @robertdebock 's https://github.com/robertdebock/ansible-playbook-cl
   - make it replace default home partition, see chapter home mount.
 - [x] configure domain (Cloudflare) + hostname
 - [ ] merge modules: sshkey and volume into droplet
+  - [ ] optioneel maken + user supplied maken, zie TODO en var.sshkey in main.tf.
 - [ ] merge modules: project into root module
 - automation:
   - packages
@@ -34,6 +35,12 @@ Inspired by @robertdebock 's https://github.com/robertdebock/ansible-playbook-cl
     - desktop environment
     - rdp
     - docker
+
+## SSH key pair to connect to the droplet
+
+Default: When no key is provided by the user; Terraform will generate one for you, upload it to Digital Ocean and place a copy of the public and private keys in `var.path` (defaults to ./files)
+
+The user can supply their own ssh key by placing the files in `./files/<ssh_key_name.pub>` and declaring the `<ssh_key_name.pub>` for `var.key_name` in the root module.
 
 ## Home mount
 

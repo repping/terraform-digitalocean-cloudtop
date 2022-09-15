@@ -30,7 +30,7 @@ variable "cloudflare_token" {
     error_message = "Cloudflare API token not set."
   }
 }
-variable "volume_name_home" {
+variable "persistent_home_volume_name" {
   description = "Name of the digitalocean volume to attach as the volume where the /home folder will be mounted. This is to keep personal data when the droplet is destroyed to save cost."
   type        = string
   default     = ""

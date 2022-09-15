@@ -24,12 +24,12 @@ module "digitalocean_project" {
 
 # Create the host
 module "digitalocean_droplet" {
-  source               = "./modules/terraform-digitalocean-droplet"
-  project_id           = module.digitalocean_project.project.id
-  project_identifier   = var.project_identifier
-  hostname             = var.project_name
-  attach_volume_names  = ["richard-cloudtop-home"]
-  key_name             = "${var.project_name}-${var.project_identifier}_ssh"
-  region               = "ams3"
-  droplet_size         = "s-1vcpu-1gb"
+  source                      = "./modules/terraform-digitalocean-droplet"
+  project_id                  = module.digitalocean_project.project.id
+  project_identifier          = var.project_identifier
+  hostname                    = var.project_name
+  persistent_home_volume_name = var.persistent_home_volume_name
+  key_name                    = "${var.project_name}-${var.project_identifier}_ssh"
+  region                      = "ams3"
+  droplet_size                = "s-1vcpu-1gb"
 }

@@ -55,8 +55,8 @@ variable "region" {
     error_message = "Please set the ID for the DigitalOcean project to deploy the resources in. (var.project_id)"
   }
 }
-variable "attach_volume_names" {
-  description = "IDs of the volumes that will be attached to the droplet."
-  type = list
-  default = []
+variable "persistent_home_volume_name" {
+  description = "IDs of the persistent home v1olumes that will be attached to the droplet."
+  type        = string
+  default     = ""
 }

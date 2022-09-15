@@ -13,7 +13,7 @@ Default: When no key is provided by the user; Terraform will generate one for yo
 
 The user can supply their own ssh key by placing the files in `./files/<ssh_key_name.pub>` and declaring the `<ssh_key_name.pub>` for `var.key_name` in the root module.
 
-## Home mount
+## Persistent home mount
 
 The volume in Digital Ocean that will be used for the `home` mount has to be manually created first. This is because this mount will contain all our personal data and we want this data to persist recreation of the droplet. Sometimes you might not need the cloudtop for a longer period of time. This way you can keep the personal data without paying for the droplet in the mean time.
 
@@ -61,6 +61,10 @@ I like to keep the volume mounted at `/mnt/cloudtop_persistent_volume` and creat
 ```shell
 ln -s /mnt/cloudtop_persistent_volume/code /home/user/code
 ```
+
+## Provisioning
+
+Currently an Ansible playbook is in the works, see `./ansible`. The ip of the droplet still need to be manually copy pasted to the inventory file. Also the playbook itself does not have variables yet, so basically replace the "non root" username everywhere and things should be good to go.
 
 ## Roadmap
 

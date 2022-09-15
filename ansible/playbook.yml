@@ -1,0 +1,101 @@
+
+#!/usr/bin/env ansible-playbook
+---
+- name: Install packages
+  hosts: all
+  gather_facts: no
+
+  tasks:
+  - name: Add a non root user
+    ansible.builtin.user:
+      name: richard
+
+  - name: Grant the non root user sudo privs
+    ansible.builtin.lineinfile:
+      dest: /etc/sudoers
+      state: present
+      regexp: '^%wheel'
+      line: 'richard ALL=(ALL) NOPASSWD: ALL'
+      validate: 'visudo -cf %s'
+
+  - name: Create the non root user .ssh directory if it does not exist
+    ansible.builtin.file:
+      path: /home/richard/.ssh
+      state: directory
+      owner: richard
+      group: richard
+      mode: '0700'
+
+  - name: Copy public ssh key to the non root user home directory
+    ansible.builtin.copy:
+      src: /root/.ssh/authorized_keys
+      dest: /home/richard/.ssh/authorized_keys
+      remote_src: true
+      owner: richard
+      group: richard
+      mode: '0600'
+
+  - name: Upgrade all packages
+    ansible.builtin.dnf:
+      name: '*'
+      state: latest
+
+  - name: Install all user requered packages
+    ansible.builtin.package:
+      name: 
+        - vim
+        - wget
+        - unzip
+        - awscli
+        - ansible
+        - git
+
+      state: present
+
+  - name: Check if Terraform is installed
+    ansible.builtin.command: terraform --version
+    failed_when: false
+    changed_when: false
+    register: terraform_installed
+
+  - name: Install Terraform
+    ansible.builtin.unarchive:
+      src: https://releases.hashicorp.com/terraform/1.2.9/terraform_1.2.9_linux_amd64.zip
+      dest: /usr/bin
+      remote_src: True
+    when: terraform_installed.rc != 0
+
+  - name: Check if TFenv is installed
+    ansible.builtin.command: ls -d ~/.tfenv
+    failed_when: false
+    changed_when: false
+    become: true
+    become_user: richard
+    register: tfenv_installed
+
+  - name: Install TFenv
+    ansible.builtin.git:
+      repo: https://github.com/tfutils/tfenv.git
+      dest: ~/.tfenv
+      depth: 1
+    become: true
+    become_user: richard
+    when: tfenv_installed.rc != 0
+
+  - name: Add TFenv to PATH
+    ansible.builtin.lineinfile:
+      path: ~/.bash_profile
+      line: 'export PATH="$HOME/.tfenv/bin:$PATH"'
+      insertbefore: BOF
+    become: true
+    become_user: richard
+    when: tfenv_installed.rc != 0
+
+  # block ssh access for the root user
+
+# Configure the installed packages
+# awscli:  credentials?
+# vim: make default editor?
+# git: 
+# ansible: v3!
+# tfenv: default version to latest

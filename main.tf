@@ -22,9 +22,10 @@ module "digitalocean_project" {
   environment = "production"
 }
 
+
 # Create the host
 module "digitalocean_droplet" {
-  source                      = "./modules/terraform-digitalocean-droplet"
+  source                        = "./modules/terraform-digitalocean-droplet"
   project_id                  = module.digitalocean_project.project.id
   project_identifier          = var.project_identifier
   hostname                    = var.project_name

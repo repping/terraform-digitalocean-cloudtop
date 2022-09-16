@@ -49,7 +49,6 @@
         - awscli
         - ansible
         - git
-
       state: present
 
   - name: Check if Terraform is installed

@@ -35,14 +35,6 @@ parted -s -a optimal /dev/sda mklabel gpt -- mkpart primary ext4 0% 100%
 mkfs.ext4 /dev/sda1
 ```
 
-Then on first boot mount the volume on `/home`:
-
-```text
-mount /dev/sda1 /home
-```
-
-By default the DigitalOcean fedora image comes with a small /home partition. This will stay available and can be accessed again by unmounting the seperate home volume. (Unless this partition is deleted ofcourse!)
-
 ### Manual mounting
 
 ( From the Digital Ocean instructions: )
@@ -50,7 +42,7 @@ By default the DigitalOcean fedora image comes with a small /home partition. Thi
 ```shell
 mkdir -p /mnt/richard-cloudtop-home; \
 mount -o discard,defaults /dev/disk/by-id/scsi-0DO_Volume_richard-cloudtop-home /mnt/richard-cloudtop-home; \
-echo /dev/disk/by-id/scsi-0DO_Volume_richard-cloudtop-home /mnt/richard-cloudtop-home ext4 defaults,nofail,discard 0 0 | sudo tee -a /etc/fstab \
+echo /dev/disk/by-id/scsi-0DO_Volume_richard-cloudtop-home /mnt/richard-cloudtop-home ext4 defaults,nofail,discard 0 0 | sudo tee -a /etc/fstab; \
 ln -s /mnt/richard-cloudtop-home/code ~/code
 ```
 
@@ -68,8 +60,8 @@ Currently an Ansible playbook is in the works, see `./ansible`. The ip of the dr
 
 ## Roadmap
 
-- [x] mount persistant /home volume --> kept partitioning & mounting steps manual for simplicity and because we are talking about persistent data!
-  - [x]make user supplied
+- [x] mount persistant /home volume --> kept partitioning (first time only!) & mounting steps manual for simplicity and because we are talking about persistent data!
+  - [x] make user supplied
   - [x] make it replace default home partition, see chapter home mount. --> replaced by just manually linking to a folder in the homedir.
 - [x] configure domain (Cloudflare) + hostname
 - [x] MERGE modules: sshkey and volume into droplet. the modules are too tiny to be useful as a standalone module.

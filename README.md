@@ -69,18 +69,23 @@ Currently an Ansible playbook is in the works, see `./ansible`. The ip of the dr
 - [ ] automation:
   - [ ] bootstrap ansible via userdata?
   - [ ] packages
-    - [ ] awscli
-    - [ ] ansible
-    - [ ] terraform
-    - [ ] tfenv
-    - [ ] git
+    - [x] awscli
+    - [x] ansible
+    - [x] terraform
+    - [x] tfenv
+    - [x] git
+    - [x] vim
+    - [x] wget
+    - [x] unzip
+    - [ ] Docker CE (for gitlab runner + more)
+    - [ ] Gitlab-runner (from binairy, rpm not available for fedora 36)
   - [ ] configure
-    - [ ] vim default
-    - [ ] user
-    - [ ] ssh key
-    - [ ] disable root login/pw login + create new personal user with same ssh key
-    - [ ] seperate home volume automatically mounted @ /homn/user
+    - [ ] vim default editor
+    - [ ] configure the gitlab-runner to automatically use docker
+    - [ ] user, other then root
+      - [ ] ssh key
+    - [ ] disable root login/pw login after the new non root user is configured
+    - [ ] seperate home volume automatically mounted @ /homn/user/code, actual home directory can remain non-persistent
   - [ ] optional
-    - [ ] desktop environment
+    - [ ] desktop environment, thought this is a huge overhead
     - [ ] rdp
-    - [ ] docker

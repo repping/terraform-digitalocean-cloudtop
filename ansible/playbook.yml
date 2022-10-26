@@ -1,7 +1,7 @@
 
 #!/usr/bin/env ansible-playbook
 ---
-- name: Install packages
+- name: Cloudtop provisioning
   hosts: all
   gather_facts: no
 
@@ -89,6 +89,67 @@
     become: true
     become_user: richard
     when: tfenv_installed.rc != 0
+
+# Install Gitlab-runner
+  # Remember when using the docker executor for the gitlab-runner you need to map /var/run/docker.sock to the same path in the container. 
+  # See also: https://docs.gitlab.com/ee/ci/docker/using_docker_build.html#use-the-docker-executor-with-docker-socket-binding
+  - name: Download Gitlab-runner binairy
+    ansible.builtin.get_url:
+      url: https://gitlab-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-runner-linux-amd64
+      dest: /usr/local/bin/gitlab-runner
+      mode: '0740'
+
+  - name: Add a gitlab-runner user
+    ansible.builtin.user:
+      name: gitlab-runner
+    notify: 
+      - config-gitlab-runner-user
+      - start-gitlab-runner
+      - gitlab-runner-docker-access
+
+# install docker
+  - name: docker install pre-requirements
+    ansible.builtin.package:
+      name: 
+        - dnf-plugins-core
+
+  - name: Add docker ce repository
+    ansible.builtin.get_url:
+      url: https://download.docker.com/linux/fedora/docker-ce.repo
+      dest: /etc/yum.repos.d/docker-ce.repo
+      mode: '0644'
+
+# sudo dnf install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+  - name: docker install
+    ansible.builtin.package:
+      name: 
+        - docker-ce
+        - docker-ce-cli
+        - containerd.io
+        - docker-compose-plugin
+    notify:
+      - enable-and-start-docker
+      - test-docker
+
+
+  handlers:
+  # Gitlab-runner handlers
+    - name: config-gitlab-runner-user
+      ansible.builtin.command: "gitlab-runner install --user=gitlab-runner --working-directory=/home/gitlab-runner"
+
+    - name: start-gitlab-runner
+      ansible.builtin.command: "gitlab-runner start"
+
+  # Docker CE installation handlers
+    - name: enable-and-start-docker
+      ansible.builtin.systemd:
+        state: started
+        enabled: true
+        name: docker
+
+    - name: test-docker
+      ansible.builtin.command: docker run hello-world
+
 
   # block ssh access for the root user
 

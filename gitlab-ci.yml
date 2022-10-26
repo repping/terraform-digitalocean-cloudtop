@@ -1,0 +1,5 @@
+stages:
+  - test
+
+include:
+  - template: Jobs/Secret-Detection.gitlab-ci.yml

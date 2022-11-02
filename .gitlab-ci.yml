@@ -7,6 +7,7 @@ stages:
 
 variables:
   TF_VAR_do_token: $DO_TOKEN
+  TF_VAR_test_var: "bla"
 
 include:
   - template: Jobs/Secret-Detection.gitlab-ci.yml

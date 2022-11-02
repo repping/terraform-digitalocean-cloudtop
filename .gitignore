@@ -6,3 +6,4 @@ files/
 .terraform*
 .pre-commit-config.yaml
 .markdownlint.yaml
+my-terraform.tfvars

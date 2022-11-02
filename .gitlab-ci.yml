@@ -1,5 +1,6 @@
 stages:
   - test
+  - plan
   - apply
   - provisioning
   - destroy
@@ -10,9 +11,36 @@ variables:
 include:
   - template: Jobs/Secret-Detection.gitlab-ci.yml
 
+image:
+  name: hashicorp/terraform:light
+  entrypoint:
+    - '/usr/bin/env'
+    - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+
+before_script:
+  - export TF_VARS_do_token=${DO_TOKEN}
+  - rm -rf .terraform
+  - terraform --version
+  - terraform init
+
+validate:
+  stage: test
+  script:
+    - terraform validate
+
+plan:
+  stage: plan
+  script:
+    - terraform plan -out "planfile"
+  dependencies:
+    - validate
+  artifacts:
+    paths:
+      - planfile
+
 terraform apply:
   stage: apply
-  image: hashicorp/terraform
+  allow_failure: false
   script: 
     - terraform apply
 
@@ -21,6 +49,5 @@ terraform apply:
 
 terraform destroy: # seperate job so that there can be other jobs/test before cleaning things up.
   stage: destroy
-  image: hashicorp/terraform
   script:
     - terraform destroy 

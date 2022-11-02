@@ -1,5 +1,26 @@
 stages:
   - test
+  - apply
+  - provisioning
+  - destroy
+
+variables:
+  TF_VAR_do_token: $DO_TOKEN
 
 include:
   - template: Jobs/Secret-Detection.gitlab-ci.yml
+
+terraform apply:
+  stage: apply
+  image: hashicorp/terraform
+  script: 
+    - terraform apply
+
+# provisioning:
+#   stage: provisioning
+
+terraform destroy: # seperate job so that there can be other jobs/test before cleaning things up.
+  stage: destroy
+  image: hashicorp/terraform
+  script:
+    - terraform destroy 

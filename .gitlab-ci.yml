@@ -6,8 +6,8 @@ stages:
   - destroy
 
 variables:
-  # TF_VAR_do_token: $DO_TOKEN
-  # TF_VAR_cloudflare_zone: $CLOUDFLARE_ZONE
+  TF_VAR_do_token: $DO_TOKEN
+  TF_VAR_cloudflare_zone: $CLOUDFLARE_ZONE
 
 include:
   - template: Jobs/Secret-Detection.gitlab-ci.yml

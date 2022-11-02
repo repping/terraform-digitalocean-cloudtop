@@ -6,8 +6,8 @@ stages:
   - destroy
 
 variables:
-  TF_VAR_do_token: $DO_TOKEN
-  TF_VAR_test_var: "bla"
+  # TF_VAR_do_token: $DO_TOKEN
+  # TF_VAR_cloudflare_zone: $CLOUDFLARE_ZONE
 
 include:
   - template: Jobs/Secret-Detection.gitlab-ci.yml
@@ -22,6 +22,7 @@ include:
 .terraform-before_script: &terraform-before_script
   before_script:
     - export TF_VARS_do_token=${DO_TOKEN}
+    - export TF_VARS_cloudflare_zone=${CLOUDFLARE_ZONE}
     - rm -rf .terraform
     - terraform --version
     - terraform init

@@ -11,20 +11,24 @@ variables:
 include:
   - template: Jobs/Secret-Detection.gitlab-ci.yml
 
-image:
-  name: hashicorp/terraform:light
-  entrypoint:
-    - '/usr/bin/env'
-    - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+.terraform-image: &terraform-image
+  image:
+    name: hashicorp/terraform:light
+    entrypoint:
+      - '/usr/bin/env'
+      - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
 
-before_script:
-  - export TF_VARS_do_token=${DO_TOKEN}
-  - rm -rf .terraform
-  - terraform --version
-  - terraform init
+.terraform-before_script: &terraform-before_script
+  before_script:
+    - export TF_VARS_do_token=${DO_TOKEN}
+    - rm -rf .terraform
+    - terraform --version
+    - terraform init
 
 validate:
   stage: test
+  <<: *terraform-image
+  <<: *terraform-before_script
   script:
     - terraform validate
 

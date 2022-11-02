@@ -34,6 +34,8 @@ validate:
 
 plan:
   stage: plan
+  <<: *terraform-image
+  <<: *terraform-before_script
   script:
     - terraform plan -out "planfile"
   dependencies:

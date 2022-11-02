@@ -8,6 +8,7 @@ stages:
 variables:
   TF_VAR_do_token: $DO_TOKEN
   TF_VAR_cloudflare_zone: $CLOUDFLARE_ZONE
+  TF_VAR_cloudflare_token: $CLOUDFLARE_TOKEN
 
 include:
   - template: Jobs/Secret-Detection.gitlab-ci.yml
@@ -23,6 +24,7 @@ include:
   before_script:
     - export TF_VARS_do_token=${DO_TOKEN}
     - export TF_VARS_cloudflare_zone=${CLOUDFLARE_ZONE}
+    - export TF_VARS_cloudflare_token=${CLOUDFLARE_TOKEN}
     - rm -rf .terraform
     - terraform --version
     - terraform init
@@ -46,16 +48,16 @@ plan:
     paths:
       - planfile
 
-terraform apply:
+.terraform apply:
   stage: apply
   allow_failure: false
   script: 
     - terraform apply
 
-# provisioning:
-#   stage: provisioning
+.provisioning:
+  stage: provisioning
 
-terraform destroy: # seperate job so that there can be other jobs/test before cleaning things up.
+.terraform destroy:
   stage: destroy
   script:
     - terraform destroy 

@@ -30,7 +30,7 @@ terraform validate:
   <<: *terraform-image
   <<: *terraform-before_script
   script:
-    - terraform validate -input=false
+    - terraform validate
 
 terraform plan:
   stage: plan

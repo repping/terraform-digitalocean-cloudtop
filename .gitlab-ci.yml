@@ -53,7 +53,7 @@ terraform apply:
   allow_failure: false
   script: 
     - terraform apply
-  dependancies:
+  dependencies:
     - terraform plan
   needs:
     - terraform plan

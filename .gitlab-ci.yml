@@ -39,7 +39,7 @@ terraform plan:
   script:
     - terraform plan -out "planfile"
   dependencies:
-    - validate
+    - "terraform validate"
   artifacts:
     paths:
       - planfile
@@ -54,9 +54,9 @@ terraform apply:
   script: 
     - terraform apply
   dependencies:
-    - terraform plan
+    - "terraform plan"
   needs:
-    - terraform plan
+    - "terraform plan"
 
 .provisioning:
   stage: provisioning
@@ -66,4 +66,4 @@ terraform destroy:
   script:
     - terraform destroy 
   needs:
-    - terraform apply
+    - "terraform apply"

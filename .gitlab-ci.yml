@@ -72,3 +72,7 @@ terraform destroy:
   needs:
     - "terraform apply"
   when: manual
+  cache:
+    paths: 
+      - ./terraform.tfstate
+      - ./terraform

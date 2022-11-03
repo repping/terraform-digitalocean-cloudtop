@@ -41,7 +41,7 @@ data "digitalocean_volume_snapshot" "snapshot-home" {
 resource "digitalocean_volume" "snapshot-home" {
   count       = var.persistent_home_volume_from_snapshot == true ? 1 : 0
   region      = var.region
-  name        = "ci-${var.persistent_home_volume_snapshot_name}" #TODO this must be passed as var for the persistent_home_volume_name
+  name        = "ci-cloudtop-volume" #TODO this must be passed as var for the persistent_home_volume_name
   size        = data.digitalocean_volume_snapshot.snapshot-home[0].min_disk_size
   snapshot_id = data.digitalocean_volume_snapshot.snapshot-home[0].id
 }

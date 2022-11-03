@@ -30,14 +30,14 @@ terraform validate:
   <<: *terraform-image
   <<: *terraform-before_script
   script:
-    - terraform validate
+    - terraform validate -input=false
 
 terraform plan:
   stage: plan
   <<: *terraform-image
   <<: *terraform-before_script
   script:
-    - terraform plan -out "planfile"
+    - terraform plan -input=false -out "planfile"
   dependencies:
     - "terraform validate"
   artifacts:
@@ -54,7 +54,7 @@ terraform apply:
   stage: apply
   allow_failure: false
   script: 
-    - terraform apply
+    - terraform apply -input=false "planfile"
   dependencies:
     - "terraform plan"
   needs:
@@ -66,6 +66,6 @@ terraform apply:
 terraform destroy:
   stage: destroy
   script:
-    - terraform destroy 
+    - terraform destroy -input=false
   needs:
     - "terraform apply"

@@ -23,10 +23,10 @@ include:
 
 .terraform-before_script: &terraform-before_script
   before_script:
-    - export TF_VARS_do_token=${DO_TOKEN}
-    - export TF_VARS_cloudflare_zone=${CLOUDFLARE_ZONE}
-    - export TF_VARS_cloudflare_token=${CLOUDFLARE_TOKEN}
-    - export TF_VARS_persistent_home_volume_from_snapshot=${PERSISTENT_HOME_VOLUME_FROM_SNAPSHOT}
+    - export TF_VAR_do_token=${DO_TOKEN}
+    - export TF_VAR_cloudflare_zone=${CLOUDFLARE_ZONE}
+    - export TF_VAR_cloudflare_token=${CLOUDFLARE_TOKEN}
+    - export TF_VAR_persistent_home_volume_from_snapshot=${PERSISTENT_HOME_VOLUME_FROM_SNAPSHOT}
     - rm -rf .terraform
     - terraform --version
     - terraform init

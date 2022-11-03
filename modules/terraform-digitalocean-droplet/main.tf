@@ -32,12 +32,28 @@ resource "digitalocean_droplet" "default" {
   ssh_keys = [digitalocean_ssh_key.ssh_keypair.fingerprint]
 }
 
+# Create and attach volume from a user provided SNAPSHOT.
+data "digitalocean_volume_snapshot" "snapshot-home" {
+  count = var.persistent_home_volume_from_snapshot == true ? 1 : 0
+  name  = var.persistent_home_volume_snapshot_name
+}
+
+resource "digitalocean_volume" "snapshot-home" {
+  count       = var.persistent_home_volume_from_snapshot == true ? 1 : 0
+  region      = var.region
+  name        = "ci-${var.persistent_home_volume_snapshot_name}" #TODO this must be passed as var for the persistent_home_volume_name
+  size        = data.digitalocean_volume_snapshot.snapshot-home[0].min_disk_size
+  snapshot_id = data.digitalocean_volume_snapshot.snapshot-home[0].id
+}
+
+# Attach volume when from  a user provided VOLUME.
 data "digitalocean_volume" "default" {
+  count  = var.persistent_home_volume_from_snapshot == true ? 0 : 1
   name   = var.persistent_home_volume_name
   region = var.region
 }
 
 resource "digitalocean_volume_attachment" "default" {
   droplet_id = digitalocean_droplet.default.id
-  volume_id  = data.digitalocean_volume.default.id
+  volume_id  = try(digitalocean_volume.snapshot-home[0].id, data.digitalocean_volume.default[0].id)
 }

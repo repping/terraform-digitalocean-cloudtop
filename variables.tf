@@ -10,12 +10,12 @@ variable "do_token" {
 variable "project_name" {
   description = "Name of the project that is being deployed in DigitalOcean."
   type        = string
-  default     = "unset-project-name"
+  default     = "ci-cloudtop"
 }
 variable "project_identifier" {
   description = "This string makes this project unique when it is deployed multiple times. Something like a project or deployment prefix/postfix."
   type        = string
-  default     = "unset-identifier"
+  default     = "ci-cldtp"
 }
 variable "cloudflare_zone" {
   description = "Name of the domain used in cloudflare."
@@ -38,15 +38,15 @@ variable "cloudflare_token" {
 variable "persistent_home_volume_name" {
   description = "Name of the digitalocean volume to attach as the volume where the /home folder will be mounted. This is to keep personal data when the droplet is destroyed to save cost."
   type        = string
-  default     = ""
+  default     = "richard-cloudtop-home"
 }
 variable "persistent_home_volume_from_snapshot" {
   description = "Boolean to enable the creation of the persistent home volume from an existing snapshot."
   type        = bool
   default     = false
 }
-variable "persistent_volume_snapshot_name" {
+variable "persistent_home_volume_snapshot_name" {
   description = "Name of the snapshot to use for the creation of the persistent home volume. Only applicable when persistent_home_volume_from_snapshot is set to true."
   type        = string
-  default     = ""
+  default     = "richard-cloudtop-home"
 }

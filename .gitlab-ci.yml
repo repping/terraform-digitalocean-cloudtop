@@ -6,9 +6,10 @@ stages:
   - destroy
 
 variables:
-  TF_VAR_do_token: $DO_TOKEN
-  TF_VAR_cloudflare_zone: $CLOUDFLARE_ZONE
-  TF_VAR_cloudflare_token: $CLOUDFLARE_TOKEN
+  TF_VARS_do_token: $DO_TOKEN
+  TF_VARS_cloudflare_zone: $CLOUDFLARE_ZONE
+  TF_VARS_cloudflare_token: $CLOUDFLARE_TOKEN
+  TF_VARS_persistent_home_volume_from_snapshot: $PERSISTENT_HOME_VOLUME_FROM_SNAPSHOT
 
 include:
   - template: Jobs/Secret-Detection.gitlab-ci.yml
@@ -25,6 +26,7 @@ include:
     - export TF_VARS_do_token=${DO_TOKEN}
     - export TF_VARS_cloudflare_zone=${CLOUDFLARE_ZONE}
     - export TF_VARS_cloudflare_token=${CLOUDFLARE_TOKEN}
+    - export TF_VARS_persistent_home_volume_from_snapshot=${PERSISTENT_HOME_VOLUME_FROM_SNAPSHOT}
     - rm -rf .terraform
     - terraform --version
     - terraform init

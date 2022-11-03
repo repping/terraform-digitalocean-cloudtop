@@ -6,6 +6,7 @@ variable "region" {
 variable "do_token" {
   description = "The Digital Ocean token."
   type        = string
+  default     = ""
 }
 variable "project_name" {
   description = "Name of the project that is being deployed in DigitalOcean."

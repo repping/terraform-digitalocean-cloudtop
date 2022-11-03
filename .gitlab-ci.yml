@@ -5,12 +5,6 @@ stages:
   - provisioning
   - destroy
 
-# variables:
-  # TF_VARS_do_token: $DO_TOKEN
-  # TF_VARS_cloudflare_zone: $CLOUDFLARE_ZONE
-  # TF_VARS_cloudflare_token: $CLOUDFLARE_TOKEN
-  # TF_VARS_persistent_home_volume_from_snapshot: $PERSISTENT_HOME_VOLUME_FROM_SNAPSHOT
-
 include:
   - template: Security/Secret-Detection.gitlab-ci.yml
 
@@ -31,14 +25,14 @@ include:
     - terraform --version
     - terraform init
 
-validate:
+terraform validate:
   stage: test
   <<: *terraform-image
   <<: *terraform-before_script
   script:
     - terraform validate
 
-plan:
+terraform plan:
   stage: plan
   <<: *terraform-image
   <<: *terraform-before_script
@@ -49,17 +43,27 @@ plan:
   artifacts:
     paths:
       - planfile
+  cache:
+    paths: 
+      - ./terraform.tfstate
+      - ./terraform
 
-.terraform apply:
+terraform apply:
   stage: apply
   allow_failure: false
   script: 
     - terraform apply
+  dependancies:
+    - terraform plan
+  needs:
+    - terraform plan
 
 .provisioning:
   stage: provisioning
 
-.terraform destroy:
+terraform destroy:
   stage: destroy
   script:
     - terraform destroy 
+  needs:
+    - terraform apply

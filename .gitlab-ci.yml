@@ -50,7 +50,7 @@ terraform apply:
   stage: apply
   allow_failure: false
   script: 
-    - terraform apply -input=false "planfile"
+    - terraform apply "planfile" --auto-approve
   dependencies:
     - "terraform plan"
   needs:
@@ -68,7 +68,7 @@ terraform destroy:
   <<: *terraform-before_script
   stage: destroy
   script:
-    - terraform destroy -input=false
+    - terraform destroy --auto-approve
   needs:
     - "terraform apply"
   when: manual

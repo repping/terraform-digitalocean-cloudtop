@@ -64,6 +64,8 @@ terraform apply:
   stage: provisioning
 
 terraform destroy:
+  <<: *terraform-image
+  <<: *terraform-before_script
   stage: destroy
   script:
     - terraform destroy -input=false

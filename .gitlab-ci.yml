@@ -43,10 +43,6 @@ terraform plan:
   artifacts:
     paths:
       - planfile
-  cache:
-    paths: 
-      - ./terraform.tfstate
-      - ./terraform
 
 terraform apply:
   <<: *terraform-image
@@ -59,6 +55,10 @@ terraform apply:
     - "terraform plan"
   needs:
     - "terraform plan"
+  cache:
+    paths: 
+      - ./terraform.tfstate
+      - ./terraform
 
 .provisioning:
   stage: provisioning
@@ -71,3 +71,4 @@ terraform destroy:
     - terraform destroy -input=false
   needs:
     - "terraform apply"
+  when: manual

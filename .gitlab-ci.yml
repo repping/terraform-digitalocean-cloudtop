@@ -49,6 +49,8 @@ terraform plan:
       - ./terraform
 
 terraform apply:
+  <<: *terraform-image
+  <<: *terraform-before_script
   stage: apply
   allow_failure: false
   script: 

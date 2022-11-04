@@ -73,7 +73,7 @@ provisioning:
   stage: provisioning
   image: alpine
   before_script:
-    - apk add ansible
+    - apk add ansible openssh
   script:
     - cd ansible
     - ansible-playbook -i inventory playbook.yml

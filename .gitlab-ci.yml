@@ -72,6 +72,7 @@ terraform apply:
 provisioning:
   stage: provisioning
   image: alpine
+  allow_failure: true
   before_script:
     - apk add ansible openssh
   script:
@@ -90,6 +91,7 @@ terraform destroy:
     - terraform destroy --auto-approve
   needs:
     - "terraform apply"
+    - provisioning
   # when: manual
   dependencies:
     - "terraform apply"

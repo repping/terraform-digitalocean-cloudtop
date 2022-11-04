@@ -54,12 +54,8 @@ terraform apply:
   stage: apply
   allow_failure: false
   script: 
-    - ls -al
-    - ls -al ../
     - terraform apply "planfile"
     - terraform output -json | jq -r '@sh "\(.droplet_ip.value) ansible_ssh_private_key_file=../\(.droplet_ssh_key.value) ansible_user=root ansible_ssh_extra_args=\"-o StrictHostKeyChecking=no\""' > ansible/inventory
-    - ls -al
-    - ls -al ../
   dependencies:
     - "terraform plan"
   needs:
@@ -67,8 +63,8 @@ terraform apply:
   artifacts:
     paths:
       - ansible/inventory
-      - ./terraform.tfstate # TODO should be artifact
-      - ./files # TODO should be artifact
+      - ./terraform.tfstate
+      - ./files
   cache:
     paths: 
       - ./.terraform
@@ -80,9 +76,6 @@ provisioning:
     - apk add ansible openssh
   script:
     - cd ansible
-    - ls -al
-    - ls -al ../
-    - ls -al ../files
     - ansible-playbook -i inventory playbook.yml
   dependencies:
     - "terraform apply"
@@ -97,6 +90,6 @@ terraform destroy:
     - terraform destroy --auto-approve
   needs:
     - "terraform apply"
-  when: manual
+  # when: manual
   dependencies:
     - "terraform apply"

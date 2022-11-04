@@ -54,9 +54,14 @@ terraform apply:
   stage: apply
   allow_failure: false
   script: 
-    - mkdir files
+    - ls -al
+    - ls -al ../
+    - ls -al ../files
     - terraform apply "planfile"
     - terraform output -json | jq -r '@sh "\(.droplet_ip.value) ansible_ssh_private_key_file=../\(.droplet_ssh_key.value) ansible_user=root ansible_ssh_extra_args=\"-o StrictHostKeyChecking=no\""' > ansible/inventory
+    - ls -al
+    - ls -al ../
+    - ls -al ../files
   dependencies:
     - "terraform plan"
   needs:
@@ -65,10 +70,10 @@ terraform apply:
     paths:
       - ansible/inventory
       - ./terraform.tfstate # TODO should be artifact
+      - ./files # TODO should be artifact
   cache:
     paths: 
       - ./.terraform
-      - ./files # TODO should be artifact
 
 provisioning:
   stage: provisioning

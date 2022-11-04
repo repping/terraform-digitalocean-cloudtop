@@ -28,7 +28,7 @@ module "digitalocean_droplet" {
   source                               = "./modules/terraform-digitalocean-droplet"
   project_id                           = module.digitalocean_project.project.id
   project_identifier                   = var.project_identifier
-  hostname                             = var.project_name
+  hostname                             = "${var.project_name}-${var.project_identifier}"
   persistent_home_volume_name          = var.persistent_home_volume_name
   persistent_home_volume_from_snapshot = var.persistent_home_volume_from_snapshot
   persistent_home_volume_snapshot_name = var.persistent_home_volume_snapshot_name

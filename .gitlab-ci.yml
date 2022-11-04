@@ -42,7 +42,7 @@ terraform plan:
   <<: *terraform-before_script
   script:
     - terraform plan -input=false -out "planfile"
-  dependencies:
+  needs:
     - "terraform validate"
   artifacts:
     paths:

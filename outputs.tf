@@ -1,3 +1,9 @@
+output "droplet_ip" {
+  value = module.digitalocean_droplet.droplet_ip
+}
+output "droplet_ssh_key" {
+  value = module.digitalocean_droplet.droplet_ssh_key
+}
 output "how_to_connect_dns" {
   value = "ssh-keygen -R ${var.project_name}.${var.cloudflare_zone}; ssh -i ${module.digitalocean_droplet.droplet_ssh_key} root@${var.project_name}.${var.cloudflare_zone}"
 }

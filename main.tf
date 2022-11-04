@@ -31,7 +31,6 @@ module "digitalocean_droplet" {
   hostname                             = var.project_name
   persistent_home_volume_name          = var.persistent_home_volume_name
   persistent_home_volume_from_snapshot = var.persistent_home_volume_from_snapshot
-  # persistent_home_volume_from_snapshot = false
   persistent_home_volume_snapshot_name = var.persistent_home_volume_snapshot_name
   key_name                             = "${var.project_name}-${var.project_identifier}_ssh"
   region                               = var.region

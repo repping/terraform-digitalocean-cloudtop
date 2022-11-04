@@ -1,1 +1,1 @@
-174.138.3.246 ansible_ssh_private_key_file=../files/cloudtop-richard-2_ssh ansible_user=root
+'104.248.204.50' ansible_ssh_private_key_file=../'files/cloudtop-richard_ssh' ansible_user=root ansible_ssh_extra_args="-o StrictHostKeyChecking=no"

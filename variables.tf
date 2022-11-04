@@ -11,12 +11,12 @@ variable "do_token" {
 variable "project_name" {
   description = "Name of the project that is being deployed in DigitalOcean."
   type        = string
-  default     = "ci-cloudtop"
+  default     = "ci-gitlab"
 }
 variable "project_identifier" {
   description = "This string makes this project unique when it is deployed multiple times. Something like a project or deployment prefix/postfix."
   type        = string
-  default     = "ci-cldtp"
+  default     = "cloudtop"
 }
 variable "cloudflare_zone" {
   description = "Name of the domain used in cloudflare."

@@ -76,6 +76,9 @@ provisioning:
     - apk add ansible openssh
   script:
     - cd ansible
+    - ls -al
+    - ls -al ../
+    - ls -al ../files
     - ansible-playbook -i inventory playbook.yml
   dependencies:
     - "terraform apply"

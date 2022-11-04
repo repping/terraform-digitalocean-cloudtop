@@ -2,7 +2,7 @@
 terraform.tfvars
 terraform.tfstate
 terraform.tfstate.backup
-files/
+files/*
 .terraform*
 .pre-commit-config.yaml
 .markdownlint.yaml

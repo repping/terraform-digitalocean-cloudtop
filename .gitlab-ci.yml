@@ -54,6 +54,7 @@ terraform apply:
   stage: apply
   allow_failure: false
   script: 
+    - mkdir files
     - terraform apply "planfile"
     - terraform output -json | jq -r '@sh "\(.droplet_ip.value) ansible_ssh_private_key_file=../\(.droplet_ssh_key.value) ansible_user=root ansible_ssh_extra_args=\"-o StrictHostKeyChecking=no\""' > ansible/inventory
   dependencies:

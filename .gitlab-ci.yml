@@ -63,9 +63,9 @@ terraform apply:
   artifacts:
     paths:
       - ansible/inventory
+      - ./terraform.tfstate # TODO should be artifact
   cache:
     paths: 
-      - ./terraform.tfstate # TODO should be artifact
       - ./.terraform
       - ./files # TODO should be artifact
 
@@ -94,7 +94,5 @@ terraform destroy:
   needs:
     - "terraform apply"
   when: manual
-  cache:
-    paths: 
-      - ./terraform.tfstate
-      - ./terraform
+  dependencies:
+    - "terraform apply"

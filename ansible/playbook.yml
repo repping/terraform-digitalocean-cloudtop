@@ -97,7 +97,7 @@
     ansible.builtin.get_url:
       url: https://gitlab-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-runner-linux-amd64
       dest: /usr/local/bin/gitlab-runner
-      mode: '0740'
+      mode: '0755'
 
   - name: Add a gitlab-runner user
     ansible.builtin.user:
@@ -105,7 +105,7 @@
     notify: 
       - config-gitlab-runner-user
       - start-gitlab-runner
-      - gitlab-runner-docker-access
+      - gitlab-runner-docker-access # TODO This handler does not seem to exist, look into this. Perhaps wrong name or perhaps forgot to create. Look at the manual install step to figure out what this handler should look like/do.
 
 # install docker
   - name: docker install pre-requirements

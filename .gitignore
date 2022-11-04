@@ -9,3 +9,4 @@ files/
 my-terraform.tfvars
 ci-terraform.tfvars
 .scratchpad
+ansible/inventory

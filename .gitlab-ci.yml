@@ -24,6 +24,7 @@ include:
     - export TF_VAR_persistent_home_volume_snapshot_name=${PERSISTENT_HOME_VOLUME_SNAPSHOT_NAME}
     - rm -rf .terraform
     - terraform --version
+    - jq --version
     - terraform init
 
 terraform validate:
@@ -52,6 +53,10 @@ terraform apply:
   allow_failure: false
   script: 
     - terraform apply "planfile"
+    # info over hoe dit te doen --> https://stackoverflow.com/questions/65315202/can-i-set-terraform-output-to-env-variables
+    # deze echo verplaatsen naar de terraform apply job en van daar de inventory schrijven en doorgeven als cache/artifact.
+    - terraform output -json | jq "droplet.public_ip" # er bestaat ook een flag om met JQ direct een shell command uit te voeren waar JSON.var in het cmd gebruikt kan worden
+    # - echo "$cloudtop-public-ip ansible_ssh_private_key_file=../files/ci-cloudtop-ci-cldtp_ssh ansible_user=root" > inventory
   dependencies:
     - "terraform plan"
   needs:
@@ -59,10 +64,14 @@ terraform apply:
   cache:
     paths: 
       - ./terraform.tfstate
-      - ./terraform
+      - ./.terraform
+      - ./files
 
 .provisioning:
   stage: provisioning
+  script:
+    - cd ansible
+    - ansible-playbook -i inventory playbook.yml
 
 terraform destroy:
   <<: *terraform-image

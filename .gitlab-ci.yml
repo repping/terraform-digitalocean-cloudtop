@@ -24,8 +24,7 @@ include:
     - export TF_VAR_persistent_home_volume_snapshot_name=${PERSISTENT_HOME_VOLUME_SNAPSHOT_NAME}
     - rm -rf .terraform
     - terraform --version
-    - sudo apk update
-    - sudo apk add jq
+    - apk add -U --no-cache jq
     - jq --version
     - terraform init
 
